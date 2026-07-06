@@ -42,6 +42,10 @@ build/Release
 node_modules/
 jspm_packages/
 
+# Git and lock files (segun preferencia del proyecto)
+.gitignore
+package-lock.json
+
 # Snowpack dependency directory (https://snowpack.dev/)
 web_modules/
 
