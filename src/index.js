@@ -1,6 +1,6 @@
-const { loadEnvFile } = require('node:process');
+const loadOptionalEnv = require('./config/loadOptionalEnv');
 
-loadEnvFile('.env');
+loadOptionalEnv('.env');
 const app = require('./server');
 const pool = require('./config/dbConnect');
 

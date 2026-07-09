@@ -1,8 +1,8 @@
-const { loadEnvFile } = require('node:process');
 const fs = require('node:fs/promises');
 const path = require('node:path');
+const loadOptionalEnv = require('../config/loadOptionalEnv');
 
-loadEnvFile('.env');
+loadOptionalEnv('.env');
 const pool = require('../config/dbConnect');
 
 async function initDb() {

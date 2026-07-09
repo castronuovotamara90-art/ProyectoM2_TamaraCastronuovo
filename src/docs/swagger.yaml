@@ -1,0 +1,182 @@
+openapi: 3.0.3
+info:
+  title: Blog API
+  version: 1.0.0
+  description: Documentacion base de la API de autores y posts.
+servers:
+  - url: http://localhost:3000
+paths:
+  /:
+    get:
+      summary: Estado general de la API
+      responses:
+        '200':
+          description: API activa
+
+  /api/authors:
+    get:
+      summary: Listar autores
+      responses:
+        '200':
+          description: Lista de autores
+    post:
+      summary: Crear autor
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [name, email]
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                  format: email
+                bio:
+                  type: string
+      responses:
+        '201':
+          description: Autor creado
+        '400':
+          description: Error de validacion
+
+  /api/authors/{id}:
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: integer
+    get:
+      summary: Obtener autor por ID
+      responses:
+        '200':
+          description: Autor encontrado
+        '404':
+          description: Autor no encontrado
+    put:
+      summary: Actualizar autor
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                  format: email
+                bio:
+                  type: string
+      responses:
+        '200':
+          description: Autor actualizado
+        '404':
+          description: Autor no encontrado
+    delete:
+      summary: Eliminar autor
+      responses:
+        '200':
+          description: Autor eliminado
+        '404':
+          description: Autor no encontrado
+
+  /api/posts:
+    get:
+      summary: Listar posts
+      parameters:
+        - in: query
+          name: published
+          required: false
+          schema:
+            type: string
+            enum: ['true', 'false']
+      responses:
+        '200':
+          description: Lista de posts
+        '400':
+          description: Query invalida
+    post:
+      summary: Crear post
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [title, content, author_id]
+              properties:
+                title:
+                  type: string
+                content:
+                  type: string
+                author_id:
+                  type: integer
+                published:
+                  type: boolean
+      responses:
+        '201':
+          description: Post creado
+        '400':
+          description: Error de validacion
+        '404':
+          description: Autor no encontrado
+
+  /api/posts/{id}:
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: integer
+    get:
+      summary: Obtener post por ID
+      responses:
+        '200':
+          description: Post encontrado
+        '404':
+          description: Post no encontrado
+    put:
+      summary: Actualizar post
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                content:
+                  type: string
+                published:
+                  type: boolean
+      responses:
+        '200':
+          description: Post actualizado
+        '404':
+          description: Post no encontrado
+    delete:
+      summary: Eliminar post
+      responses:
+        '200':
+          description: Post eliminado
+        '404':
+          description: Post no encontrado
+
+  /api/posts/author/{authorId}:
+    get:
+      summary: Listar posts por autor
+      parameters:
+        - in: path
+          name: authorId
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Lista de posts del autor
