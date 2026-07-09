@@ -1,10 +1,6 @@
-const loadOptionalEnv = require('./config/loadOptionalEnv');
-
-loadOptionalEnv('.env');
+const { PORT } = require('./config/envs');
 const app = require('./server');
 const pool = require('./config/dbConnect');
-
-const PORT = process.env.PORT || 3000;
 
 const server = app.listen(PORT, () => {
   console.log(`Servidor corriendo en http://localhost:${PORT}`);

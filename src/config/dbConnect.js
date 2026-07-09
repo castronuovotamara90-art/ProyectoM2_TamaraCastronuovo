@@ -1,14 +1,37 @@
 const { Pool } = require('pg');
+const envs = require('./envs');
 
-const pool = new Pool({
-  host: process.env.DB_HOST,
-  port: process.env.DB_PORT,
-  database: process.env.DB_NAME,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  max: 20,
-  idleTimeoutMillis: 30000,
-  connectionTimeoutMillis: 2000,
-});
+const dbConnectionLocal = {
+  host: envs.DB_HOST,
+  port: envs.DB_PORT,
+  database: envs.DB_NAME,
+  user: envs.DB_USER,
+  password: envs.DB_PASSWORD,
+  max: envs.DB_MAX_CONNECT,
+  idleTimeoutMillis: envs.DB_IDLETIMEOUT,
+  connectionTimeoutMillis: envs.DB_CONNECTIONTIMEOUT,
+};
+
+const dbConnectionProduction = envs.DATABASE_URL
+  ? {
+      connectionString: envs.DATABASE_URL,
+      ssl: envs.DB_SSL ? { rejectUnauthorized: false } : false,
+      max: envs.DB_MAX_CONNECT,
+      idleTimeoutMillis: envs.DB_IDLETIMEOUT,
+      connectionTimeoutMillis: envs.DB_CONNECTIONTIMEOUT,
+    }
+  : {
+      host: envs.DB_HOST,
+      port: envs.DB_PORT,
+      database: envs.DB_NAME,
+      user: envs.DB_USER,
+      password: envs.DB_PASSWORD,
+      ssl: envs.DB_SSL ? { rejectUnauthorized: false } : false,
+      max: envs.DB_MAX_CONNECT,
+      idleTimeoutMillis: envs.DB_IDLETIMEOUT,
+      connectionTimeoutMillis: envs.DB_CONNECTIONTIMEOUT,
+    };
+
+const pool = new Pool(envs.NODE_ENV === 'production' ? dbConnectionProduction : dbConnectionLocal);
 
 module.exports = pool;
