@@ -7,7 +7,7 @@ const swaggerSpec = {
   },
   servers: [
     {
-      url: 'http://localhost:3000',
+      url: process.env.NODE_ENV === 'production' ? 'https://fsm2miniblog-production.up.railway.app' : 'http://localhost:3000',
     },
   ],
   tags: [
