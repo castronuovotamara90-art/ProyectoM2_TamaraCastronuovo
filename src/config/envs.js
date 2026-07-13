@@ -13,6 +13,13 @@ function toNumber(value, fallback) {
 	return Number.isFinite(parsed) ? parsed : fallback;
 }
 
+function toBoolean(value, fallback = false) {
+	if (value === undefined || value === '') return fallback;
+	if (typeof value === 'boolean') return value;
+	const normalized = String(value).trim().toLowerCase();
+	return normalized === 'true' || normalized === '1' || normalized === 'yes';
+}
+
 const NODE_ENV = process.env.NODE_ENV || 'development';
 const PORT = toNumber(process.env.PORT, 3000);
 
@@ -39,8 +46,9 @@ const DB_MAX_CONNECT = toNumber(process.env.DB_MAX_CONNECT, 20);
 const DB_IDLETIMEOUT = toNumber(process.env.DB_IDLETIMEOUT, 30000);
 const DB_CONNECTIONTIMEOUT = toNumber(process.env.DB_CONNECTIONTIMEOUT, 2000);
 
-// Railway suele requerir SSL en produccion para conexiones administradas.
-const DB_SSL = process.env.DB_SSL === 'true' || NODE_ENV === 'production';
+// SSL queda explicitamente configurable por variable para soportar proveedores
+// que exponen conexiones internas sin TLS en runtime.
+const DB_SSL = toBoolean(process.env.DB_SSL, false);
 
 function validateDbConfig() {
 	if (NODE_ENV !== 'production') {
