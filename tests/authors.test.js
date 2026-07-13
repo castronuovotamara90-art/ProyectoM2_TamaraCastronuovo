@@ -1,10 +1,14 @@
 import request from 'supertest';
 import { loadEnvFile } from 'node:process';
-import { beforeAll, describe, expect, test } from 'vitest';
+import { afterEach, beforeAll, describe, expect, test, vi } from 'vitest';
 
 let app;
 
 describe('Authors API', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   beforeAll(async () => {
     loadEnvFile('.env');
     ({ default: app } = await import('../src/server.js'));
@@ -23,6 +27,36 @@ describe('Authors API', () => {
     expect(response.body).toHaveProperty('error');
     expect(response.body.error).toContain('email');
     expect(response.body.error).toMatch(/email/i);
+  });
+
+  test('debe devolver 400 si falta name', async () => {
+    const unique = Date.now();
+    const payload = {
+      email: `sin.name.${unique}@example.com`,
+      bio: 'Sin name en el body',
+    };
+
+    const response = await request(app).post('/api/authors').send(payload);
+
+    expect(response.status).toBe(400);
+    expect(response.body).toHaveProperty('error');
+    expect(response.body.error).toContain('name');
+    expect(response.body.error).toContain('Campos requeridos faltantes');
+  });
+
+  test('debe devolver 400 si name esta vacio', async () => {
+    const unique = Date.now();
+    const payload = {
+      name: '   ',
+      email: `name.vacio.${unique}@example.com`,
+    };
+
+    const response = await request(app).post('/api/authors').send(payload);
+
+    expect(response.status).toBe(400);
+    expect(response.body).toHaveProperty('error');
+    expect(response.body.error).toContain('name');
+    expect(response.body.error).toContain('Campos requeridos faltantes');
   });
 
   test('debe devolver 400 si el body no es JSON', async () => {
@@ -122,10 +156,8 @@ describe('Authors API', () => {
     const deleteResponse = await request(app)
       .delete(`/api/authors/${createResponse.body.id}`);
 
-    expect(deleteResponse.status).toBe(200);
-    expect(deleteResponse.body).toEqual({
-      message: 'Autor eliminado exitosamente',
-    });
+    expect(deleteResponse.status).toBe(204);
+    expect(deleteResponse.body).toEqual({});
 
     const getResponse = await request(app).get(`/api/authors/${createResponse.body.id}`);
     expect(getResponse.status).toBe(404);
@@ -185,4 +217,5 @@ describe('Authors API', () => {
     expect(response.status).toBe(400);
     expect(response.body.error).toContain('entero positivo');
   });
+
 });

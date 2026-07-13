@@ -64,12 +64,6 @@ const swaggerSpec = {
           error: { type: 'string', example: 'Mensaje de error' },
         },
       },
-      DeleteResponse: {
-        type: 'object',
-        properties: {
-          message: { type: 'string', example: 'Operacion completada exitosamente' },
-        },
-      },
     },
     responses: {
       BadRequest: {
@@ -283,18 +277,8 @@ const swaggerSpec = {
           },
         ],
         responses: {
-          '200': {
+          '204': {
             description: 'Autor eliminado',
-            content: {
-              'application/json': {
-                schema: { $ref: '#/components/schemas/DeleteResponse' },
-                examples: {
-                  deleted: {
-                    value: { message: 'Autor eliminado exitosamente' },
-                  },
-                },
-              },
-            },
           },
           '400': { $ref: '#/components/responses/BadRequest' },
           '404': { $ref: '#/components/responses/NotFound' },
@@ -458,18 +442,8 @@ const swaggerSpec = {
           },
         ],
         responses: {
-          '200': {
+          '204': {
             description: 'Post eliminado',
-            content: {
-              'application/json': {
-                schema: { $ref: '#/components/schemas/DeleteResponse' },
-                examples: {
-                  deleted: {
-                    value: { message: 'Post eliminado exitosamente' },
-                  },
-                },
-              },
-            },
           },
           '400': { $ref: '#/components/responses/BadRequest' },
           '404': { $ref: '#/components/responses/NotFound' },

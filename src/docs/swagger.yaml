@@ -4,10 +4,23 @@ info:
   version: 1.0.0
   description: Documentacion base de la API de autores y posts.
 servers:
+  - url: https://fsm2miniblog-production.up.railway.app
   - url: http://localhost:3000
+tags:
+  - name: Health
+  - name: Authors
+  - name: Posts
+components:
+  schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
 paths:
   /:
     get:
+      tags: [Health]
       summary: Estado general de la API
       responses:
         '200':
@@ -15,11 +28,15 @@ paths:
 
   /api/authors:
     get:
+      tags: [Authors]
       summary: Listar autores
       responses:
         '200':
           description: Lista de autores
+        '500':
+          description: Error interno del servidor
     post:
+      tags: [Authors]
       summary: Crear autor
       requestBody:
         required: true
@@ -41,23 +58,37 @@ paths:
           description: Autor creado
         '400':
           description: Error de validacion
+        '500':
+          description: Error interno del servidor
 
   /api/authors/{id}:
-    parameters:
-      - in: path
-        name: id
-        required: true
-        schema:
-          type: integer
     get:
+      tags: [Authors]
       summary: Obtener autor por ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
       responses:
         '200':
           description: Autor encontrado
+        '400':
+          description: Error de validacion
         '404':
           description: Autor no encontrado
+        '500':
+          description: Error interno del servidor
     put:
+      tags: [Authors]
       summary: Actualizar autor
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
       requestBody:
         required: true
         content:
@@ -75,18 +106,34 @@ paths:
       responses:
         '200':
           description: Autor actualizado
+        '400':
+          description: Error de validacion
         '404':
           description: Autor no encontrado
+        '500':
+          description: Error interno del servidor
     delete:
+      tags: [Authors]
       summary: Eliminar autor
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
       responses:
-        '200':
+        '204':
           description: Autor eliminado
+        '400':
+          description: Error de validacion
         '404':
           description: Autor no encontrado
+        '500':
+          description: Error interno del servidor
 
   /api/posts:
     get:
+      tags: [Posts]
       summary: Listar posts
       parameters:
         - in: query
@@ -100,7 +147,10 @@ paths:
           description: Lista de posts
         '400':
           description: Query invalida
+        '500':
+          description: Error interno del servidor
     post:
+      tags: [Posts]
       summary: Crear post
       requestBody:
         required: true
@@ -125,23 +175,37 @@ paths:
           description: Error de validacion
         '404':
           description: Autor no encontrado
+        '500':
+          description: Error interno del servidor
 
   /api/posts/{id}:
-    parameters:
-      - in: path
-        name: id
-        required: true
-        schema:
-          type: integer
     get:
+      tags: [Posts]
       summary: Obtener post por ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
       responses:
         '200':
           description: Post encontrado
+        '400':
+          description: Error de validacion
         '404':
           description: Post no encontrado
+        '500':
+          description: Error interno del servidor
     put:
+      tags: [Posts]
       summary: Actualizar post
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
       requestBody:
         required: true
         content:
@@ -158,18 +222,34 @@ paths:
       responses:
         '200':
           description: Post actualizado
+        '400':
+          description: Error de validacion
         '404':
           description: Post no encontrado
+        '500':
+          description: Error interno del servidor
     delete:
+      tags: [Posts]
       summary: Eliminar post
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
       responses:
-        '200':
+        '204':
           description: Post eliminado
+        '400':
+          description: Error de validacion
         '404':
           description: Post no encontrado
+        '500':
+          description: Error interno del servidor
 
   /api/posts/author/{authorId}:
     get:
+      tags: [Posts]
       summary: Listar posts por autor
       parameters:
         - in: path
@@ -180,3 +260,7 @@ paths:
       responses:
         '200':
           description: Lista de posts del autor
+        '400':
+          description: Error de validacion
+        '500':
+          description: Error interno del servidor

@@ -1,13 +1,84 @@
 import request from 'supertest';
 import { loadEnvFile } from 'node:process';
-import { beforeAll, describe, expect, test } from 'vitest';
+import { afterEach, beforeAll, describe, expect, test, vi } from 'vitest';
 
 let app;
 
 describe('Posts API', () => {
+	afterEach(() => {
+		vi.restoreAllMocks();
+	});
+
 	beforeAll(async () => {
 		loadEnvFile('.env');
 		({ default: app } = await import('../src/server.js'));
+	});
+
+	test('debe devolver 400 si falta title', async () => {
+		const payload = {
+			content: 'Contenido sin titulo',
+			author_id: 1,
+		};
+
+		const response = await request(app).post('/api/posts').send(payload);
+
+		expect(response.status).toBe(400);
+		expect(response.body.error).toContain('Campos requeridos faltantes');
+		expect(response.body.error).toContain('title');
+	});
+
+	test('debe devolver 400 si title esta vacio', async () => {
+		const payload = {
+			title: '   ',
+			content: 'Contenido valido',
+			author_id: 1,
+		};
+
+		const response = await request(app).post('/api/posts').send(payload);
+
+		expect(response.status).toBe(400);
+		expect(response.body.error).toContain('Campos requeridos faltantes');
+		expect(response.body.error).toContain('title');
+	});
+
+	test('debe devolver 400 si falta content', async () => {
+		const payload = {
+			title: 'Post sin content',
+			author_id: 1,
+		};
+
+		const response = await request(app).post('/api/posts').send(payload);
+
+		expect(response.status).toBe(400);
+		expect(response.body.error).toContain('Campos requeridos faltantes');
+		expect(response.body.error).toContain('content');
+	});
+
+	test('debe devolver 400 si content esta vacio', async () => {
+		const payload = {
+			title: 'Post con content vacio',
+			content: '   ',
+			author_id: 1,
+		};
+
+		const response = await request(app).post('/api/posts').send(payload);
+
+		expect(response.status).toBe(400);
+		expect(response.body.error).toContain('Campos requeridos faltantes');
+		expect(response.body.error).toContain('content');
+	});
+
+	test('debe devolver 400 si falta author_id', async () => {
+		const payload = {
+			title: 'Post sin author',
+			content: 'Contenido sin autor',
+		};
+
+		const response = await request(app).post('/api/posts').send(payload);
+
+		expect(response.status).toBe(400);
+		expect(response.body.error).toContain('Campos requeridos faltantes');
+		expect(response.body.error).toContain('author_id');
 	});
 
 	test('debe crear un post', async () => {
@@ -218,10 +289,8 @@ describe('Posts API', () => {
 		const deleteResponse = await request(app)
 			.delete(`/api/posts/${createResponse.body.id}`);
 
-		expect(deleteResponse.status).toBe(200);
-		expect(deleteResponse.body).toEqual({
-			message: 'Post eliminado exitosamente',
-		});
+		expect(deleteResponse.status).toBe(204);
+		expect(deleteResponse.body).toEqual({});
 
 		const getResponse = await request(app).get(`/api/posts/${createResponse.body.id}`);
 		expect(getResponse.status).toBe(404);
@@ -251,4 +320,5 @@ describe('Posts API', () => {
 		expect(response.status).toBe(400);
 		expect(response.body.error).toContain('entero positivo');
 	});
+
 });

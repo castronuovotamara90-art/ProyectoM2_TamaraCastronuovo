@@ -81,7 +81,7 @@ async function deletePost(req, res, next) {
       return res.status(404).json({ error: 'Post no encontrado' });
     }
 
-    return res.json({ message: 'Post eliminado exitosamente' });
+    return res.status(204).send();
   } catch (error) {
     console.error('Error en DELETE /api/posts/:id:', error.message);
     return res.status(500).json({ error: 'Error eliminando post' });

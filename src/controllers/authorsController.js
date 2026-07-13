@@ -70,7 +70,7 @@ async function deleteAuthor(req, res, next) {
       return res.status(404).json({ error: 'Autor no encontrado' });
     }
 
-    return res.json({ message: 'Autor eliminado exitosamente' });
+    return res.status(204).send();
   } catch (error) {
     console.error('Error en DELETE /api/authors/:id:', error.message);
     return res.status(500).json({ error: 'Error eliminando autor' });
