@@ -1,10 +1,14 @@
-# fsm2_miniblog
+# ProyectoM2_TamaraCastronuovo
 
-API REST para gestion de autores y posts construida con Express y PostgreSQL.
+API REST para gestionar autores y publicaciones de blog, construida con Express y PostgreSQL.
 
 ## Descripcion del proyecto
 
-Este proyecto implementa un backend CRUD con:
+Este proyecto implementa un backend CRUD para administrar autores y posts de un mini blog. La API permite crear, listar, actualizar y eliminar autores y publicaciones, aplicando validaciones de entrada y persistencia en PostgreSQL.
+
+El modelo de datos se basa en una relacion 1:N entre autores y posts: un autor puede tener muchos posts y cada post pertenece a un autor.
+
+El proyecto incluye:
 
 - Endpoints para autores y posts.
 - Validaciones de datos de entrada.
@@ -40,19 +44,6 @@ Este proyecto implementa un backend CRUD con:
 ## Variables de entorno
 
 Crear un archivo .env en la raiz del proyecto tomando como base .env.example.
-
-Ejemplo local:
-
-```env
-NODE_ENV=development
-PORT=3000
-
-DB_HOST=localhost
-DB_PORT=5432
-DB_NAME=blog_db
-DB_USER=blog_user
-DB_PASSWORD=blog_password_2026
-```
 
 Para despliegue (Railway), puede usarse DATABASE_URL o las variables DB_*.
 
@@ -107,6 +98,7 @@ npm run test:watch
 ## OpenAPI y Swagger
 
 - Swagger UI local: http://localhost:3000/api-docs/
+- Swagger UI produccion: https://fsm2miniblog-production.up.railway.app/api-docs/#/Authors/get_api_authors
 - Alias: http://localhost:3000/docs y http://localhost:3000/swagger
 - OpenAPI runtime (fuente canonicamente usada): src/config/swagger.js
 - OpenAPI archivo YAML: src/docs/swagger.yaml
@@ -151,8 +143,8 @@ npm run db:init
 
 5. Verificar URL publica y documentacion:
 
-	- URL publica: https://<tu-servicio>.up.railway.app
-	- Swagger UI: https://<tu-servicio>.up.railway.app/api-docs/
+	- URL publica: https://fsm2miniblog-production.up.railway.app
+	- Swagger UI: https://fsm2miniblog-production.up.railway.app/api-docs/ 
 
 ## Registro de uso de IA
 
