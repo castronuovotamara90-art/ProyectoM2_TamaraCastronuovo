@@ -106,7 +106,7 @@ npm run test:watch
 ## OpenAPI y Swagger
 
 - Swagger UI local: http://localhost:3000/api-docs/
-- Swagger UI produccion: https://fsm2miniblog-production.up.railway.app/api-docs/#/Authors/get_api_authors
+- Swagger UI produccion: https://fsm2miniblog-production.up.railway.app/api-docs/
 - Alias: http://localhost:3000/docs y http://localhost:3000/swagger
 - OpenAPI runtime (fuente canonicamente usada): src/config/swagger.js
 - OpenAPI archivo YAML: src/docs/swagger.yaml
@@ -167,5 +167,25 @@ Se utilizo asistencia de IA para:
 - Diagnostico de errores de entorno y deploy en Railway.
 - Guia de pruebas de endpoints en Swagger.
 - Recomendaciones de cobertura de testing y cierre de documentacion.
+
+Algunos de los prompts que utilice: 
+## Prompts usados con GitHub Copilot
+
+Durante el desarrollo de este proyecto utilicé prompts como los siguientes:
+
+"Hola estoy aprendiendo backend y necesito saber que pasa que mi url no funciona en http://localhost:3000/api/authors"
+"Acabo de crear un repositorio en GitHub donde quiero administrar todo el código de este proyecto, ¿qué tengo que hacer para poder hacer commit y push?"
+"Tengo este error después del push, ¿qué ha pasado?"
+"¿Cómo resuelvo este conflicto en .gitignore?"
+"Use el comando curl http://localhost:3000/api/posts?published=true y esperaba que me devuelva todos los posts publicados, ¿por qué no funciona?"
+"¿Me puedes explicar qué significa router.get?"
+"Tengo que crear conexiones con PostgreSQL; ¿cómo puedo hacerlo? Pool de conexiones vs cliente único"
+
+Estos prompts me ayudaron a:
+- entender rutas y endpoints en Express
+- depurar errores de Git y GitHub
+- comprender conceptos de API REST
+- trabajar con PostgreSQL y pools de conexión
+- configurar archivos como server.js y .gitignore
 
 Las decisiones finales de implementacion, validacion y ejecucion fueron verificadas manualmente en el proyecto.
