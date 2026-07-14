@@ -49,7 +49,8 @@ const DATABASE_URL = firstDefined(
 
 const DB_MAX_CONNECT = toNumber(process.env.DB_MAX_CONNECT, 20);
 const DB_IDLETIMEOUT = toNumber(process.env.DB_IDLETIMEOUT, 30000);
-const DB_CONNECTIONTIMEOUT = toNumber(process.env.DB_CONNECTIONTIMEOUT, 2000);
+// Cloud databases can take a few seconds to accept new connections (cold starts/network jitter).
+const DB_CONNECTIONTIMEOUT = toNumber(process.env.DB_CONNECTIONTIMEOUT, 10000);
 
 // SSL is opt-in via DB_SSL environment variable.
 // Automatic SSL detection caused connection failures on Railway proxies.
