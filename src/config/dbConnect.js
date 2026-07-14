@@ -12,20 +12,24 @@ const dbConnectionLocal = {
   connectionTimeoutMillis: envs.DB_CONNECTIONTIMEOUT,
 };
 
-const dbConnectionProduction = envs.DATABASE_URL
+const hasDiscreteDbConfig = Boolean(
+  envs.DB_HOST && envs.DB_PORT && envs.DB_NAME && envs.DB_USER && envs.DB_PASSWORD
+);
+
+const dbConnectionProduction = hasDiscreteDbConfig
   ? {
-      connectionString: envs.DATABASE_URL,
+      host: envs.DB_HOST,
+      port: envs.DB_PORT,
+      database: envs.DB_NAME,
+      user: envs.DB_USER,
+      password: envs.DB_PASSWORD,
       ssl: envs.DB_SSL ? { rejectUnauthorized: false } : false,
       max: envs.DB_MAX_CONNECT,
       idleTimeoutMillis: envs.DB_IDLETIMEOUT,
       connectionTimeoutMillis: envs.DB_CONNECTIONTIMEOUT,
     }
   : {
-      host: envs.DB_HOST,
-      port: envs.DB_PORT,
-      database: envs.DB_NAME,
-      user: envs.DB_USER,
-      password: envs.DB_PASSWORD,
+      connectionString: envs.DATABASE_URL,
       ssl: envs.DB_SSL ? { rejectUnauthorized: false } : false,
       max: envs.DB_MAX_CONNECT,
       idleTimeoutMillis: envs.DB_IDLETIMEOUT,
