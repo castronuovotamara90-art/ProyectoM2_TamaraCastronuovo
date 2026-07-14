@@ -46,9 +46,9 @@ const DB_MAX_CONNECT = toNumber(process.env.DB_MAX_CONNECT, 20);
 const DB_IDLETIMEOUT = toNumber(process.env.DB_IDLETIMEOUT, 30000);
 const DB_CONNECTIONTIMEOUT = toNumber(process.env.DB_CONNECTIONTIMEOUT, 2000);
 
-// SSL queda explicitamente configurable por variable para soportar proveedores
-// que exponen conexiones internas sin TLS en runtime.
-const DB_SSL = toBoolean(process.env.DB_SSL, false);
+// En produccion habilitamos SSL por defecto para evitar cortes de handshake
+// en proveedores gestionados como Railway.
+const DB_SSL = toBoolean(process.env.DB_SSL, NODE_ENV === 'production');
 
 function validateDbConfig() {
 	if (NODE_ENV !== 'production') {

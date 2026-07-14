@@ -2,7 +2,9 @@ const fs = require('node:fs/promises');
 const path = require('node:path');
 const loadOptionalEnv = require('../config/loadOptionalEnv');
 
-loadOptionalEnv('.env');
+if (process.env.NODE_ENV !== 'production') {
+  loadOptionalEnv('.env');
+}
 const pool = require('../config/dbConnect');
 
 async function initDb() {
