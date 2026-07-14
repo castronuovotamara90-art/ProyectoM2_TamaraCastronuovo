@@ -14,14 +14,14 @@ function usesRailwayPrivateHost(value) {
 }
 
 function getSslConfig(connectionTarget) {
+  // Railway public TCP proxy requires TLS no matter what.
+  if (usesRailwayPublicProxy(connectionTarget)) {
+    return { rejectUnauthorized: false };
+  }
+
   // Respect explicit DB_SSL when provided by the environment.
   if (hasValue(process.env.DB_SSL)) {
     return envs.DB_SSL ? { rejectUnauthorized: false } : false;
-  }
-
-  // Railway public TCP proxy requires TLS.
-  if (usesRailwayPublicProxy(connectionTarget)) {
-    return { rejectUnauthorized: false };
   }
 
   // Railway private network host usually works without TLS.
