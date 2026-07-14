@@ -20,6 +20,11 @@ function toBoolean(value, fallback = false) {
 	return normalized === 'true' || normalized === '1' || normalized === 'yes';
 }
 
+function toOptionalBoolean(value) {
+	if (value === undefined || value === '') return undefined;
+	return toBoolean(value, false);
+}
+
 const NODE_ENV = process.env.NODE_ENV || 'development';
 const PORT = toNumber(process.env.PORT, 3000);
 
@@ -48,7 +53,8 @@ const DB_CONNECTIONTIMEOUT = toNumber(process.env.DB_CONNECTIONTIMEOUT, 2000);
 
 // SSL is opt-in via DB_SSL environment variable.
 // Automatic SSL detection caused connection failures on Railway proxies.
-const DB_SSL = toBoolean(process.env.DB_SSL, false);
+// When undefined, dbConnect will not force an ssl value and will let pg/url decide.
+const DB_SSL = toOptionalBoolean(process.env.DB_SSL);
 
 function validateDbConfig() {
 	if (NODE_ENV !== 'production') {
