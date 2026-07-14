@@ -36,10 +36,10 @@ const DB_PASSWORD = firstDefined(
 	process.env.POSTGRES_PASSWORD
 );
 const DATABASE_URL = firstDefined(
+	process.env.DATABASE_PUBLIC_URL,
 	process.env.DATABASE_URL,
 	process.env.POSTGRES_URL,
-	process.env.DATABASE_PRIVATE_URL,
-	process.env.DATABASE_PUBLIC_URL
+	process.env.DATABASE_PRIVATE_URL
 );
 
 const DB_MAX_CONNECT = toNumber(process.env.DB_MAX_CONNECT, 20);
