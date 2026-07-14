@@ -98,11 +98,24 @@ paths:
               properties:
                 name:
                   type: string
+                  example: Ana Garcia actualizada
                 email:
                   type: string
                   format: email
+                  example: ana.garcia@example.com
                 bio:
                   type: string
+                  example: Backend developer enfocada en Node.js y PostgreSQL
+            examples:
+              partialUpdate:
+                value:
+                  name: Ana Garcia actualizada
+                  bio: Backend developer enfocada en Node.js y PostgreSQL
+              fullUpdate:
+                value:
+                  name: Ana Garcia
+                  email: ana.garcia@example.com
+                  bio: Backend developer enfocada en APIs REST
       responses:
         '200':
           description: Autor actualizado
@@ -215,10 +228,22 @@ paths:
               properties:
                 title:
                   type: string
+                  example: Introduccion a Node.js (actualizado)
                 content:
                   type: string
+                  example: Contenido actualizado del post sobre Node.js y su ecosistema.
                 published:
                   type: boolean
+                  example: true
+            examples:
+              editDraft:
+                value:
+                  title: Introduccion a Node.js (actualizado)
+                  content: Contenido actualizado del post sobre Node.js y su ecosistema.
+                  published: false
+              publishOnly:
+                value:
+                  published: true
       responses:
         '200':
           description: Post actualizado
