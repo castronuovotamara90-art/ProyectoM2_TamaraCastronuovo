@@ -5,6 +5,8 @@ node_modules/
 .env
 .env.*
 !.env.example
+debug.env
+debug-env.js
 
 # Archivos segun tu preferencia actual
 package-lock.json
