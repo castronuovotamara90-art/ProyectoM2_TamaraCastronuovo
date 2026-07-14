@@ -1,36 +1,10 @@
 const { Pool } = require('pg');
 const envs = require('./envs');
 
-function hasValue(value) {
-  return value !== undefined && value !== null && value !== '';
-}
-
-function usesRailwayPublicProxy(value) {
-  return typeof value === 'string' && value.includes('.proxy.rlwy.net');
-}
-
-function usesRailwayPrivateHost(value) {
-  return typeof value === 'string' && value.includes('.railway.internal');
-}
-
-function getSslConfig(connectionTarget) {
-  // Railway public TCP proxy requires TLS no matter what.
-  if (usesRailwayPublicProxy(connectionTarget)) {
-    return { rejectUnauthorized: false };
-  }
-
-  // Respect explicit DB_SSL when provided by the environment.
-  if (hasValue(process.env.DB_SSL)) {
-    return envs.DB_SSL ? { rejectUnauthorized: false } : false;
-  }
-
-  // Railway private network host usually works without TLS.
-  if (usesRailwayPrivateHost(connectionTarget)) {
-    return false;
-  }
-
-  // Safe default for managed providers in production.
-  return envs.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false;
+function getSslConfig() {
+  // Only enable SSL if explicitly requested via DB_SSL environment variable.
+  // Automatic SSL detection has caused connection failures on some Railway proxies.
+  return envs.DB_SSL ? { rejectUnauthorized: false } : false;
 }
 
 const dbConnectionLocal = {
@@ -44,18 +18,18 @@ const dbConnectionLocal = {
   connectionTimeoutMillis: envs.DB_CONNECTIONTIMEOUT,
 };
 
-const hasDatabaseUrl = hasValue(envs.DATABASE_URL);
+const hasDatabaseUrl = envs.DATABASE_URL !== undefined && envs.DATABASE_URL !== '';
 const hasDiscreteConfig =
-  hasValue(envs.DB_HOST) &&
-  hasValue(envs.DB_PORT) &&
-  hasValue(envs.DB_NAME) &&
-  hasValue(envs.DB_USER) &&
-  hasValue(envs.DB_PASSWORD);
+  envs.DB_HOST &&
+  envs.DB_PORT &&
+  envs.DB_NAME &&
+  envs.DB_USER &&
+  envs.DB_PASSWORD;
 
 const dbConnectionProduction = hasDatabaseUrl
   ? {
       connectionString: envs.DATABASE_URL,
-      ssl: getSslConfig(envs.DATABASE_URL),
+      ssl: getSslConfig(),
       max: envs.DB_MAX_CONNECT,
       idleTimeoutMillis: envs.DB_IDLETIMEOUT,
       connectionTimeoutMillis: envs.DB_CONNECTIONTIMEOUT,
@@ -66,7 +40,7 @@ const dbConnectionProduction = hasDatabaseUrl
       database: envs.DB_NAME,
       user: envs.DB_USER,
       password: envs.DB_PASSWORD,
-      ssl: getSslConfig(envs.DB_HOST),
+      ssl: getSslConfig(),
       max: envs.DB_MAX_CONNECT,
       idleTimeoutMillis: envs.DB_IDLETIMEOUT,
       connectionTimeoutMillis: envs.DB_CONNECTIONTIMEOUT,
